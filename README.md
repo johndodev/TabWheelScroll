@@ -1,6 +1,6 @@
 # Tab Wheel Scroll
 
-## Scroll tabs with alt + mouse wheel OR right click + mouse wheel.
+Scroll tabs with alt + mouse wheel OR right click + mouse wheel.
 
 ### Usage 
 ----------
