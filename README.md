@@ -1,2 +1,1 @@
-# TabWheelScroll
-Chrome addon to scroll tabs with mouse wheel
+https://chrome.google.com/webstore/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal
