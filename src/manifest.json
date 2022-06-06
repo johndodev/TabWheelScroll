@@ -33,7 +33,6 @@
     "<all_urls>"
   ],
   "permissions": [
-    "scripting",
-    "tabs"
+    "scripting"
   ]
 }
