@@ -9,7 +9,6 @@ async function main() {
         });
     });
 
-    // elements包含index的属性, 和以name命名的属性, 其中以name命名的属性是不可枚举的, 只能通过这种方式获取出来
     const fieldNames = Object.getOwnPropertyNames(form.elements);
     const configs = await chrome.storage.sync.get(fieldNames);
     for (const name of fieldNames) {
