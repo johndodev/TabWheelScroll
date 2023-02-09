@@ -5,6 +5,11 @@
 chrome.runtime.onInstalled.addListener(injectEverywhere);
 chrome.runtime.onMessage.addListener(onMessage);
 
+/** @returns {Promise<{jumpOverUnavailableTab: bool, cyclicSwitchTab: bool}>} */
+async function getConfigs() {
+	return chrome.storage.sync.get(['jumpOverUnavailableTab', 'cyclicSwitchTab'])
+}
+
 /**
  * Listen the message...
  * @param message
@@ -12,7 +17,7 @@ chrome.runtime.onMessage.addListener(onMessage);
  * @param sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-	switch(message){
+	switch (message) {
 		case 'up':
 			activeTab(sender.tab.index, sender.tab.windowId, -1);
 			break;
@@ -29,15 +34,19 @@ function onMessage(message, sender, sendResponse) {
  * @param delta
  */
 async function activeTab(tabIndex, windowId, delta) {
+	const configs = await getConfigs();
 	const tabs = await chrome.tabs.query({
 		windowId: windowId
 	});
-	let tab = null
-	for (let i = tabIndex + delta; i >= 0 && i < tabs.length; i += delta) {
-		if (tabs[i].url) {
-			tab = tabs[i]
+	let tab = null;
+	let i = tabIndex + delta;
+	while (configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) {
+		let currentTab = tabs[(i + tabs.length) % tabs.length];
+		if (!configs.jumpOverUnavailableTab || await checkTabAvailable(currentTab)) {
+			tab = currentTab;
 			break;
 		}
+		i += delta;
 	}
 	if (tab) {
 		// active the tab
@@ -47,7 +56,7 @@ async function activeTab(tabIndex, windowId, delta) {
 		chrome.scripting.executeScript({
 			target: { tabId: tab.id },
 			function: disableContextMenu
-		});
+		})
 	}
 }
 
@@ -55,10 +64,10 @@ async function activeTab(tabIndex, windowId, delta) {
  * On plugin install, inject the js on all opened tabs
  */
 function injectEverywhere() {
-	chrome.tabs.query({}, function(tabs) {
-		for (let i= 0; i < tabs.length; i++) {
+	chrome.tabs.query({}, function (tabs) {
+		for (let i = 0; i < tabs.length; i++) {
 			chrome.scripting.executeScript({
-				target: {tabId: tabs[i].id},
+				target: { tabId: tabs[i].id },
 				files: ['main.js']
 			});
 		}
@@ -68,3 +77,14 @@ function injectEverywhere() {
 function disableContextMenu() {
 	window.addEventListener("contextmenu", preventOneContextMenuEvent);
 }
+
+async function checkTabAvailable(tab) {
+	if (!tab.url) return false;
+
+	return await chrome.scripting.executeScript({
+		target: { tabId: tab.id },
+		func: noop
+	}).catch(() => null) != null;
+}
+
+function noop() { }
