@@ -12,16 +12,13 @@ chrome.runtime.onMessage.addListener(onMessage);
  * @param sendResponse
  */
 function onMessage(message, sender, sendResponse) {
-	if (message === 'up') {
-		const index = sender.tab.index - 1;
-
-		if (index >= 0) {
-			activeTab(index, sender.tab.windowId);
-		}
-	}
-
-	if (message === 'down') {
-		activeTab(sender.tab.index + 1, sender.tab.windowId);
+	switch(message){
+		case 'up':
+			activeTab(sender.tab.index, sender.tab.windowId, -1);
+			break;
+		case 'down':
+			activeTab(sender.tab.index, sender.tab.windowId, 1);
+			break;
 	}
 }
 
@@ -29,27 +26,29 @@ function onMessage(message, sender, sendResponse) {
  * Active a tab
  * @param tabIndex
  * @param windowId
+ * @param delta
  */
-function activeTab(tabIndex, windowId) {
-	let query = {
-		'index': tabIndex,
-		'windowId': windowId
-	};
-
-	chrome.tabs.query(query, function(tabs) {
-		let tab = tabs[0] || null;
-
-		if (tab) {
-			// active the tab
-			chrome.tabs.update(tab.id, {active:true});
-
-			// prevent context menu one time (when scrolled with right click, release the click open the context menu)
-			chrome.scripting.executeScript({
-				target: {tabId: tab.id},
-				function: disableContextMenu
-			});
-		}
+async function activeTab(tabIndex, windowId, delta) {
+	const tabs = await chrome.tabs.query({
+		windowId: windowId
 	});
+	let tab = null
+	for (let i = tabIndex + delta; i >= 0 && i < tabs.length; i += delta) {
+		if (tabs[i].url) {
+			tab = tabs[i]
+			break;
+		}
+	}
+	if (tab) {
+		// active the tab
+		chrome.tabs.update(tab.id, { active: true });
+
+		// prevent context menu one time (when scrolled with right click, release the click open the context menu)
+		chrome.scripting.executeScript({
+			target: { tabId: tab.id },
+			function: disableContextMenu
+		});
+	}
 }
 
 /**
