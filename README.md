@@ -4,8 +4,7 @@ Tab Wheel Scroll is a Chrome extension to scroll through tabs with Alt + mouse w
 
 You can download it here: https://chrome.google.com/webstore/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal
 
-### Usage 
-----------
+## Usage 
 
 - Way 1 : Press ALT Key + mouse wheel
 - Way 2 : Press mouse right button + mouse wheel
@@ -14,7 +13,7 @@ When you scroll your mouse has to be anywhere over the page but not over the tab
 
 Also, if you once disabled the extension and re-enable it, all the tabs has to be reloaded to register the event (restart chrome is fine).
 
-### Where it works
----------------
+## Where it does not works
 
-It's working on every pages with real content loaded EXCEPT internal "chrome://" pages or "https://chrome.google.com/*" pages.
+- Internal "chrome://" pages or "https://chrome.google.com/*" pages.
+- Search results pages (like "https://www.google.com/search?q=test") if you didn't allow the extension to access this kind of pages on the settings page.
