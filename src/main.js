@@ -2,9 +2,7 @@
  * Send message to the server (to background.js)
  */
 window.addEventListener('wheel', function(e) {
-    // alt or right click is pressed, we must scroll...
-    console.log(e);
-
+    // if alt or right click is pressed, we must scroll...
     if (e.altKey || e.buttons === 2) {
         // prevent the new active tab to actually scroll
         e.preventDefault();

@@ -9,11 +9,9 @@ chrome.runtime.onInstalled.addListener(injectEverywhere);
  */
 chrome.runtime.onMessage.addListener(onMessage);
 
-/** @returns {Promise<{jumpOverUnavailableTab: bool, cyclicSwitchTab: bool}>} */
+/** @returns {Promise<{cyclicSwitchTab: bool}>} */
 async function getConfigs() {
-	const a =  chrome.storage.sync.get(['jumpOverUnavailableTab', 'cyclicSwitchTab'])
-    console.log(a);
-    return a;
+	return chrome.storage.sync.get(['cyclicSwitchTab'])
 }
 
 /**
@@ -43,7 +41,7 @@ async function activeTab(fromTab, delta) {
 	let i = fromTab.index + delta;
 	while (configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) {
 		let currentTab = tabs[(i + tabs.length) % tabs.length];
-		if (!configs.jumpOverUnavailableTab || await checkTabAvailable(currentTab)) {
+		if (await checkTabAvailable(currentTab)) {
 			tab = currentTab;
 			break;
 		}
@@ -84,7 +82,6 @@ function injectEverywhere() {
 function disableContextMenu() {
 	function preventOnce(e) {
 		e.preventDefault();
-		// window.removeEventListener("contextmenu", preventOnce);
 	}
 	window.addEventListener("contextmenu", preventOnce, { once: true });
 }
