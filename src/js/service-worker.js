@@ -1,45 +1,46 @@
 /**
- * The server
- * Listen message from the plugin
+ * On plugin install, inject the js on all opened tabs
+ * https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onInstalled
  */
 chrome.runtime.onInstalled.addListener(injectEverywhere);
+
+/**
+ * https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
+ */
 chrome.runtime.onMessage.addListener(onMessage);
 
 /** @returns {Promise<{jumpOverUnavailableTab: bool, cyclicSwitchTab: bool}>} */
 async function getConfigs() {
-	return chrome.storage.sync.get(['jumpOverUnavailableTab', 'cyclicSwitchTab'])
+	const a =  chrome.storage.sync.get(['jumpOverUnavailableTab', 'cyclicSwitchTab'])
+    console.log(a);
+    return a;
 }
 
 /**
- * Listen the message...
- * @param message
- * @param sender
- * @param sendResponse
+ * Handle messages from the content script
+ * https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
  */
 function onMessage(message, sender, sendResponse) {
 	switch (message) {
 		case 'up':
-			activeTab(sender.tab.index, sender.tab.windowId, -1);
+			activeTab(sender.tab, -1);
 			break;
 		case 'down':
-			activeTab(sender.tab.index, sender.tab.windowId, 1);
+			activeTab(sender.tab, 1);
 			break;
 	}
 }
 
 /**
  * Active a tab
- * @param tabIndex
- * @param windowId
- * @param delta
  */
-async function activeTab(tabIndex, windowId, delta) {
+async function activeTab(fromTab, delta) {
 	const configs = await getConfigs();
 	const tabs = await chrome.tabs.query({
-		windowId: windowId
+		windowId: fromTab.windowId
 	});
 	let tab = null;
-	let i = tabIndex + delta;
+	let i = fromTab.index + delta;
 	while (configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) {
 		let currentTab = tabs[(i + tabs.length) % tabs.length];
 		if (!configs.jumpOverUnavailableTab || await checkTabAvailable(currentTab)) {
@@ -55,7 +56,7 @@ async function activeTab(tabIndex, windowId, delta) {
 		// prevent context menu one time (when scrolled with right click, release the click open the context menu)
 		chrome.scripting.executeScript({
 			target: { tabId: tab.id },
-			function: disableContextMenu
+			func: disableContextMenu
 		})
 	}
 }
@@ -66,16 +67,26 @@ async function activeTab(tabIndex, windowId, delta) {
 function injectEverywhere() {
 	chrome.tabs.query({}, function (tabs) {
 		for (let i = 0; i < tabs.length; i++) {
-			chrome.scripting.executeScript({
-				target: { tabId: tabs[i].id },
-				files: ['main.js']
-			});
+            if (tabs[i].status === 'unloaded') continue;
+
+            checkTabAvailable(tabs[i]).then(available => {
+                if (available) {
+                    chrome.scripting.executeScript({
+                        target: { tabId: tabs[i].id },
+                        files: ['main.js']
+                    });
+                }
+            })
 		}
 	});
 }
 
 function disableContextMenu() {
-	window.addEventListener("contextmenu", preventOneContextMenuEvent);
+	function preventOnce(e) {
+		e.preventDefault();
+		// window.removeEventListener("contextmenu", preventOnce);
+	}
+	window.addEventListener("contextmenu", preventOnce, { once: true });
 }
 
 async function checkTabAvailable(tab) {
@@ -84,7 +95,11 @@ async function checkTabAvailable(tab) {
 	return await chrome.scripting.executeScript({
 		target: { tabId: tab.id },
 		func: noop
-	}).catch(() => null) != null;
+	}).catch(function(error) {
+        // console.log(error);
+        // console.log(tab);
+        return null;
+    }) != null;
 }
 
 function noop() { }

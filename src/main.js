@@ -1,28 +1,18 @@
 /**
- * The Client, send message to the server (to background.js)
+ * Send message to the server (to background.js)
  */
-window.addEventListener('mousewheel', function(e) {
+window.addEventListener('wheel', function(e) {
     // alt or right click is pressed, we must scroll...
+    console.log(e);
+
     if (e.altKey || e.buttons === 2) {
-        if (e.wheelDelta / 120 > 0) {
-            // to previous tab
-            chrome.runtime.sendMessage('up');
-        }
-        else {
-            // to next tab
-            chrome.runtime.sendMessage('down');
-        }
-
-        // prevent the new active tab to actually scroll (sometimes it doesn't work...)
+        // prevent the new active tab to actually scroll
         e.preventDefault();
+
+        if (e.deltaY < 0) {
+            chrome.runtime && chrome.runtime.sendMessage('up');
+        } else if (e.deltaY > 0) {
+            chrome.runtime && chrome.runtime.sendMessage('down');
+        }
     }
-});
-
-/**
- * Prevent the context menu to show up after a scroll with the right click
- */
-function preventOneContextMenuEvent(e) {
-    e.preventDefault();
-    window.removeEventListener('contextmenu', preventOneContextMenuEvent);
-}
-
+}, { passive: false });

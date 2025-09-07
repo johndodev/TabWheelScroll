@@ -1,6 +1,6 @@
 # Tab Wheel Scroll
 
-Tab Wheel Scroll is a chome addon to Scroll tabs with alt + mouse wheel OR right click + mouse wheel.
+Tab Wheel Scroll is a Chrome extension to scroll through tabs with Alt + mouse wheel OR right-click + mouse wheel.
 
 You can download it here: https://chrome.google.com/webstore/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal
 

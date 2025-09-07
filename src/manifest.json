@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Wheel Scroll",
-  "version": "2.1",
+  "version": "2.2",
   "description" : "Scroll tabs with alt + mouse wheel OR right click + mouse wheel.",
   "action": {
     "default_icon": {
@@ -19,7 +19,7 @@
   },
   "author": "Jonathan Plantey",
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "js/service-worker.js"
   },
   "content_scripts": [
     {
@@ -27,6 +27,7 @@
       "js": ["main.js"],
       "run_at": "document_start",
       "all_frames": true,
+      "match_about_blank": true,
       "match_origin_as_fallback": true
     }
   ],
