@@ -1,16 +1,19 @@
-/**
- * Send message to the server (to background.js)
- */
-window.addEventListener('wheel', function(e) {
-    // if alt or right click is pressed, we must scroll...
-    if (e.altKey || e.buttons === 2) {
-        // prevent the new active tab to actually scroll
-        e.preventDefault();
+let isScrolling = false;
+let scrollTimer = null;
 
-        if (e.deltaY < 0) {
-            chrome.runtime && chrome.runtime.sendMessage('up');
-        } else if (e.deltaY > 0) {
-            chrome.runtime && chrome.runtime.sendMessage('down');
-        }
+window.addEventListener('wheel', function(e) {
+    if (window !== window.top) return;
+    if (!e.altKey && e.buttons !== 2) return;
+    if (e.deltaY === 0) return;
+
+    e.preventDefault();
+
+    if (!isScrolling) {
+        isScrolling = true;
+        const direction = e.deltaY < 0 ? 'up' : 'down';
+        chrome.runtime?.sendMessage({ direction, rightClick: e.buttons === 2 });
     }
+
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { isScrolling = false; }, 200);
 }, { passive: false });

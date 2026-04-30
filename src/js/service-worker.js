@@ -14,48 +14,37 @@ async function getConfigs() {
 	return chrome.storage.sync.get(['cyclicSwitchTab'])
 }
 
-/**
- * Handle messages from the content script
- * https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
- */
-function onMessage(message, sender, sendResponse) {
-	switch (message) {
-		case 'up':
-			activeTab(sender.tab, -1);
-			break;
-		case 'down':
-			activeTab(sender.tab, 1);
-			break;
-	}
+function onMessage(message, sender) {
+	const { direction, rightClick } = message;
+	const delta = direction === 'up' ? -1 : 1;
+	activeTab(sender.tab, delta, rightClick);
 }
 
-/**
- * Active a tab
- */
-async function activeTab(fromTab, delta) {
+async function activeTab(fromTab, delta, rightClick) {
 	const configs = await getConfigs();
-	const tabs = await chrome.tabs.query({
-		windowId: fromTab.windowId
-	});
+	const tabs = await chrome.tabs.query({ windowId: fromTab.windowId });
 	let tab = null;
 	let i = fromTab.index + delta;
-	while (configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) {
-		let currentTab = tabs[(i + tabs.length) % tabs.length];
+	let skipped = 0;
+
+	while ((configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) && skipped < tabs.length) {
+		const currentTab = tabs[(i + tabs.length) % tabs.length];
 		if (await checkTabAvailable(currentTab)) {
 			tab = currentTab;
 			break;
 		}
 		i += delta;
+		skipped++;
 	}
-	if (tab) {
-		// active the tab
-		chrome.tabs.update(tab.id, { active: true });
 
-		// prevent context menu one time (when scrolled with right click, release the click open the context menu)
-		chrome.scripting.executeScript({
-			target: { tabId: tab.id },
-			func: disableContextMenu
-		})
+	if (tab) {
+		chrome.tabs.update(tab.id, { active: true });
+		if (rightClick) {
+			chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+				func: disableContextMenu
+			});
+		}
 	}
 }
 
@@ -93,8 +82,6 @@ async function checkTabAvailable(tab) {
 		target: { tabId: tab.id },
 		func: noop
 	}).catch(function(error) {
-        // console.log(error);
-        // console.log(tab);
         return null;
     }) != null;
 }
