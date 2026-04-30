@@ -11,6 +11,7 @@ async function main() {
     const configs = await chrome.storage.sync.get(fieldNames);
     for (const name of fieldNames) {
         const ele = form.elements[name];
+        if (ele.disabled) continue;
         const value = configs[name];
         if (ele.type === 'checkbox') {
             ele.checked = value;
