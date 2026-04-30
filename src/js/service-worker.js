@@ -22,9 +22,14 @@ function onMessage(message, sender) {
 
 async function activeTab(fromTab, delta, rightClick) {
 	const configs = await getConfigs();
-	const tabs = await chrome.tabs.query({ windowId: fromTab.windowId });
+	const allTabs = await chrome.tabs.query({ windowId: fromTab.windowId });
+	// Exclude hidden tabs and tabs from other workspaces (Opera exposes workspaceId on tabs)
+	const tabs = allTabs.filter(t => !t.hidden && (!fromTab.workspaceId || t.workspaceId === fromTab.workspaceId));
 	let tab = null;
-	let i = fromTab.index + delta;
+	// Use array position (not tab.index) to handle gaps from filtered hidden tabs
+	const currentPos = tabs.findIndex(t => t.id === fromTab.id);
+	if (currentPos === -1) return;
+	let i = currentPos + delta;
 	let skipped = 0;
 
 	while ((configs.cyclicSwitchTab || (i >= 0 && i < tabs.length)) && skipped < tabs.length) {
@@ -76,7 +81,11 @@ function disableContextMenu() {
 }
 
 async function checkTabAvailable(tab) {
+	console.log(tab);
 	if (!tab.url) return false;
+
+	// Unloaded tabs can't be scripted but can still be activated (they'll load on focus)
+	if (tab.status === 'unloaded') return true;
 
 	return await chrome.scripting.executeScript({
 		target: { tabId: tab.id },
