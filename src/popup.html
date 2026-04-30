@@ -61,11 +61,53 @@
             color: #5f6368;
             line-height: 1.4;
         }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #5f6368;
+            padding: 10px 0 4px;
+        }
+
+        .warning {
+            font-size: 11.5px;
+            color: #c5221f;
+            background: #fce8e6;
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin: 6px 0 0;
+            line-height: 1.4;
+        }
+
+        .section-title + .option {
+            border-top: 1px solid #e8eaed;
+        }
     </style>
 </head>
 
 <body>
     <form id="form">
+        <div class="section-title">Trigger modes</div>
+        <label class="option">
+            <input type="checkbox" name="altWheelEnabled" />
+            <div class="option-text">
+                <span class="option-label">Alt + scroll</span>
+                <span class="option-desc">Switch tabs by scrolling while holding the Alt key.</span>
+            </div>
+        </label>
+        <label class="option">
+            <input type="checkbox" name="rightClickWheelEnabled" />
+            <div class="option-text">
+                <span class="option-label">Right-click + scroll</span>
+                <span class="option-desc">Switch tabs by scrolling while holding the right mouse button.</span>
+            </div>
+        </label>
+        <p class="warning" id="noTriggerWarning" hidden>
+            No trigger mode is active — the extension will not switch tabs.
+        </p>
+        <div class="section-title">Behavior</div>
         <label class="option">
             <input type="checkbox" name="jumpOverUnavailableTab" checked disabled />
             <div class="option-text">
