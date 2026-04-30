@@ -66,9 +66,9 @@ function injectEverywhere() {
                     chrome.scripting.executeScript({
                         target: { tabId: tabs[i].id },
                         files: ['main.js']
-                    });
+                    }).catch(() => {});
                 }
-            })
+            });
 		}
 	});
 }
@@ -81,18 +81,16 @@ function disableContextMenu() {
 }
 
 async function checkTabAvailable(tab) {
-	console.log(tab);
 	if (!tab.url) return false;
 
-	// Unloaded tabs can't be scripted but can still be activated (they'll load on focus)
 	if (tab.status === 'unloaded') return true;
 
-	return await chrome.scripting.executeScript({
+	// executeScript never settles on some pages (e.g. Chrome's XML viewer) — treat as unavailable
+	const timeout = new Promise(resolve => setTimeout(() => resolve(false), 150));
+	const check = chrome.scripting.executeScript({
 		target: { tabId: tab.id },
-		func: noop
-	}).catch(function(error) {
-        return null;
-    }) != null;
-}
+		func: () => {}
+	}).then(() => true, () => false);
 
-function noop() { }
+	return Promise.race([check, timeout]);
+}
