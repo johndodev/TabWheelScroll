@@ -24,8 +24,8 @@ jobs:
           cd src && zip -r "../tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip" . \
             -x "manifest.chrome.json" \
             -x "manifest.edge.json" \
-            -x "manifest.firefox.json"
-          rm src/manifest.json
+            -x "manifest.firefox.json" && \
+          rm manifest.json
 
       - name: Build Edge zip
         run: |
@@ -33,8 +33,8 @@ jobs:
           cd src && zip -r "../tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip" . \
             -x "manifest.chrome.json" \
             -x "manifest.edge.json" \
-            -x "manifest.firefox.json"
-          rm src/manifest.json
+            -x "manifest.firefox.json" && \
+          rm manifest.json
 
       - name: Build Firefox zip
         run: |
@@ -42,8 +42,8 @@ jobs:
           cd src && zip -r "../tab-wheel-scroll-firefox-${{ steps.version.outputs.version }}.zip" . \
             -x "manifest.chrome.json" \
             -x "manifest.edge.json" \
-            -x "manifest.firefox.json"
-          rm src/manifest.json
+            -x "manifest.firefox.json" && \
+          rm manifest.json
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
