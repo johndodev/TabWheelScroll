@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build Chrome zip
+        run: |
+          cp src/manifest.chrome.json src/manifest.json
+          zip -r "tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip" src/ \
+            -x "src/manifest.chrome.json" \
+            -x "src/manifest.edge.json" \
+            -x "src/manifest.firefox.json"
+          rm src/manifest.json
+
+      - name: Build Edge zip
+        run: |
+          cp src/manifest.edge.json src/manifest.json
+          zip -r "tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip" src/ \
+            -x "src/manifest.chrome.json" \
+            -x "src/manifest.edge.json" \
+            -x "src/manifest.firefox.json"
+          rm src/manifest.json
+
+      - name: Build Firefox zip
+        run: |
+          cp src/manifest.firefox.json src/manifest.json
+          zip -r "tab-wheel-scroll-firefox-${{ steps.version.outputs.version }}.zip" src/ \
+            -x "src/manifest.chrome.json" \
+            -x "src/manifest.edge.json" \
+            -x "src/manifest.firefox.json"
+          rm src/manifest.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip
+            tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip
+            tab-wheel-scroll-firefox-${{ steps.version.outputs.version }}.zip
