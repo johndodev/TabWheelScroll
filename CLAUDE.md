@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Tab Wheel Scroll is a Chrome extension (Manifest V3) that lets users switch browser tabs using Alt+wheel or right-click+wheel. Published on the Chrome Web Store.
+Tab Wheel Scroll is a browser extension (Manifest V3) that lets users switch browser tabs using Alt+wheel or right-click+wheel. Supports Chrome, Edge, and Firefox. Published on the Chrome Web Store.
 
 ## Development
 
@@ -25,7 +25,21 @@ The extension follows the standard MV3 content script + service worker pattern:
 
 - **`src/popup.html` + `src/popup.js`** — settings UI with one user-configurable option: cyclic tab switching. Reads/writes to `chrome.storage.sync`.
 
-- **`src/manifest.json`** — MV3 manifest. Requires `scripting` and `storage` permissions; `<all_urls>` host permission (with tab restrictions enforced in JS).
+- **`src/manifest.chrome.json`**, **`src/manifest.edge.json`**, **`src/manifest.firefox.json`** — per-browser MV3 manifests. All require `scripting` and `storage` permissions; `<all_urls>` host permission (with tab restrictions enforced in JS). `src/manifest.json` is gitignored — it is generated at release time by copying the appropriate per-browser file.
+
+## Release
+
+Releases are automated via GitHub Actions (`.github/workflows/release.yml`). Push a tag to trigger:
+
+```bash
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The workflow builds three zips (one per browser) by copying the matching per-browser manifest to `src/manifest.json`, zipping `src/`, then removing it. A GitHub Release is then created with all three zips attached:
+- `tab-wheel-scroll-chrome-<version>.zip`
+- `tab-wheel-scroll-edge-<version>.zip`
+- `tab-wheel-scroll-firefox-<version>.zip`
 
 ## Key Behaviors
 
