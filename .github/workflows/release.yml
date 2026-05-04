@@ -21,28 +21,28 @@ jobs:
       - name: Build Chrome zip
         run: |
           cp src/manifest.chrome.json src/manifest.json
-          zip -r "tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip" src/ \
-            -x "src/manifest.chrome.json" \
-            -x "src/manifest.edge.json" \
-            -x "src/manifest.firefox.json"
+          cd src && zip -r "../tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip" . \
+            -x "manifest.chrome.json" \
+            -x "manifest.edge.json" \
+            -x "manifest.firefox.json"
           rm src/manifest.json
 
       - name: Build Edge zip
         run: |
           cp src/manifest.edge.json src/manifest.json
-          zip -r "tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip" src/ \
-            -x "src/manifest.chrome.json" \
-            -x "src/manifest.edge.json" \
-            -x "src/manifest.firefox.json"
+          cd src && zip -r "../tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip" . \
+            -x "manifest.chrome.json" \
+            -x "manifest.edge.json" \
+            -x "manifest.firefox.json"
           rm src/manifest.json
 
       - name: Build Firefox zip
         run: |
           cp src/manifest.firefox.json src/manifest.json
-          zip -r "tab-wheel-scroll-firefox-${{ steps.version.outputs.version }}.zip" src/ \
-            -x "src/manifest.chrome.json" \
-            -x "src/manifest.edge.json" \
-            -x "src/manifest.firefox.json"
+          cd src && zip -r "../tab-wheel-scroll-firefox-${{ steps.version.outputs.version }}.zip" . \
+            -x "manifest.chrome.json" \
+            -x "manifest.edge.json" \
+            -x "manifest.firefox.json"
           rm src/manifest.json
 
       - name: Create GitHub Release
