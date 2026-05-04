@@ -1,19 +1,30 @@
 # Tab Wheel Scroll
 
-Tab Wheel Scroll is a Chrome extension to scroll through tabs with Alt + mouse wheel OR right-click + mouse wheel.
+Tab Wheel Scroll lets you navigate between browser tabs using your mouse wheel — no clicking on the tab bar required.
 
-You can download it here: https://chrome.google.com/webstore/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal
+Available for **Chrome**, **Firefox**, and **Edge**.
 
-## Usage 
+- [Chrome Web Store](https://chromewebstore.google.com/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal)
+- [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tab-wheel-scroll/) [incoming]
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/tab-wheel-scroll/pjndnglgbpeholhdbkihnfcdefplbckm) [incoming]
 
-- Way 1 : Press ALT Key + mouse wheel
-- Way 2 : Press mouse right button + mouse wheel
+## Usage
 
-When you scroll your mouse has to be anywhere over the page but not over the tabs.
+- Hold **Alt** and scroll up/down to switch tabs
+- or Hold the **right mouse button** and scroll up/down to switch tabs
 
-Also, if you once disabled the extension and re-enable it, all the tabs has to be reloaded to register the event (restart chrome is fine).
+> Your cursor must be positioned over the web page content (not over the tab bar itself).
 
-## Where it does not works
+## Where it does not work
 
-- Internal "chrome://" pages or "https://chrome.google.com/*" pages.
-- Search results pages (like "https://www.google.com/search?q=test") if you didn't allow the extension to access this kind of pages on the settings page.
+For security reasons, browsers restrict extensions on certain pages. The extension will skip:
+
+- Internal pages (e.g., browser settings)
+- Add-on Web Store pages
+- Search results (e.g., Google Search) unless you have explicitly allowed the extension to access these pages in your browser settings
+
+## Contact
+
+Since there are no notifications for comments, please contact via email or GitHub for any specific request or issue.
+
+[TabWheelScroll on GitHub](https://github.com/johndodev/TabWheelScroll)
