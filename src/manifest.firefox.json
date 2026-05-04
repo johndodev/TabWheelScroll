@@ -1,12 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Tab Wheel Scroll",
-  "version": "3.0",
+  "version": "3.0.3",
   "description" : "Scroll tabs with alt + mouse wheel OR right click + mouse wheel.",
   "browser_specific_settings": {
     "gecko": {
       "id": "tabwheelscroll@jonathanplantey",
-      "strict_min_version": "109.0"
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": ["none"],
+        "optional": []
+      }
     }
   },
   "action": {
@@ -25,7 +29,8 @@
   },
   "author": "Jonathan Plantey",
   "background": {
-    "service_worker": "js/service-worker.js"
+    "service_worker": "js/service-worker.js",
+    "scripts": ["js/service-worker.js"]
   },
   "content_scripts": [
     {
