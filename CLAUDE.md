@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Tab Wheel Scroll is a browser extension (Manifest V3) that lets users switch browser tabs using Alt+wheel or right-click+wheel. Supports Chrome, Edge, and Firefox. Published on the Chrome Web Store.
 
+## Shell Commands
+
+Never prepend `cd /mnt/c/Users/...` before commands, and never use `git -C "C:/..."` for git commands. The shell is already running at the project root — use commands directly as-is.
+
 ## Development
 
 No build step, no test framework, no linter. Edit files directly — changes take effect after reloading the extension in Chrome.
