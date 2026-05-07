@@ -5,7 +5,7 @@ Tab Wheel Scroll lets you navigate between browser tabs using your mouse wheel â
 Available for **Chrome**, **Firefox**, and **Edge**.
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal)
-- [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tab-wheel-scroll/) [incoming]
+- [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tab-wheel-scroll/)
 - [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/tab-wheel-scroll/pjndnglgbpeholhdbkihnfcdefplbckm) [incoming]
 
 ## Usage
