@@ -6,7 +6,7 @@ Available for **Chrome**, **Firefox**, and **Edge**.
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal)
 - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tab-wheel-scroll/)
-- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/tab-wheel-scroll/pjndnglgbpeholhdbkihnfcdefplbckm) [incoming]
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/tab-wheel-scroll/mejpjilamaiieacohfbgkdepggkikjnh)
 
 ## Usage
 
