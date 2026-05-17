@@ -1,7 +1,7 @@
 async function main() {
     const form = document.getElementById('form');
     const warning = document.getElementById('noTriggerWarning');
-    const defaults = { altWheelEnabled: true, rightClickWheelEnabled: true }; // cyclicSwitchTab omitted intentionally — defaults to false (unchecked)
+    const defaults = { altWheelEnabled: true, rightClickWheelEnabled: true }; // keys not listed default to false (unchecked): cyclicSwitchTab, reverseScrollDirection
 
     function updateWarning() {
         const altEl = form.elements['altWheelEnabled'];
