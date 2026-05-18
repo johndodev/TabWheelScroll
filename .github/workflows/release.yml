@@ -45,9 +45,19 @@ jobs:
             -x "manifest.firefox.json" && \
           rm manifest.json
 
+      - name: Extract changelog for version
+        id: changelog
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          body=$(sed -n "/^## \[${version}\]/,/^## \[/{ /^## \[${version}\]/d; /^## \[/d; p }" CHANGELOG.md)
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          body: ${{ steps.changelog.outputs.body }}
           files: |
             tab-wheel-scroll-chrome-${{ steps.version.outputs.version }}.zip
             tab-wheel-scroll-edge-${{ steps.version.outputs.version }}.zip
