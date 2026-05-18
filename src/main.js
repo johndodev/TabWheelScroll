@@ -20,13 +20,14 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 window.addEventListener('wheel', function(e) {
     if (window !== window.top) return;
     if ((!e.altKey || !altEnabled) && (e.buttons !== 2 || !rightClickEnabled)) return;
-    if (e.deltaY === 0) return;
+    const delta = e.deltaY !== 0 ? e.deltaY : -e.deltaX;
+    if (delta === 0) return;
 
     e.preventDefault();
 
     if (!isScrolling) {
         isScrolling = true;
-        const goingUp = e.deltaY < 0;
+        const goingUp = delta < 0;
         const direction = (goingUp !== reverseEnabled) ? 'up' : 'down';
         chrome.runtime?.sendMessage({ direction, rightClick: e.buttons === 2 });
     }
