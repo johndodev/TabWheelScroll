@@ -11,10 +11,11 @@ Available for **Chrome**, **Firefox**, **Edge**, and all Chromium-based browsers
 ## Usage
 
 - Hold **Alt** and scroll **up/down** to switch tabs
-- or Hold the **right mouse button** and scroll **up/down** to switch tabs
-- Horizontal scrolling (left/right) is also supported and works the same way
+- or Hold the **right mouse button** and scroll **up/down** to switch tabs  
 
 > Your cursor must be positioned over the web page content (not over the tab bar itself).
+
+> ✓ Also supports horizontal scroll wheels (e.g., Logitech MX Master 3).
 
 ## Where it does not work
 

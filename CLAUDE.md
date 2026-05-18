@@ -31,6 +31,13 @@ The extension follows the standard MV3 content script + service worker pattern:
 
 - **`src/manifest.chrome.json`**, **`src/manifest.edge.json`**, **`src/manifest.firefox.json`** — per-browser MV3 manifests. All require `scripting` and `storage` permissions; `<all_urls>` host permission (with tab restrictions enforced in JS). `src/manifest.json` is gitignored — it is generated at release time by copying the appropriate per-browser file.
 
+## Store Listings
+
+Store listing texts (descriptions, etc.) for each browser store are in `/store`:
+- `store/chrome.md` — Chrome Web Store
+- `store/edge.md` — Microsoft Edge Add-ons
+- `store/firefox.md` — Firefox Add-on Hub
+
 ## Release
 
 Releases are automated via GitHub Actions (`.github/workflows/release.yml`). Push a tag to trigger:
