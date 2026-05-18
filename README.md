@@ -2,7 +2,7 @@
 
 Tab Wheel Scroll lets you navigate between browser tabs using your mouse wheel — no clicking on the tab bar required.
 
-Available for **Chrome**, **Firefox**, and **Edge**.
+Available for **Chrome**, **Firefox**, **Edge**, and all Chromium-based browsers.
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/tab-wheel-scroll/aknfcgiicpmnfhncpljcadokcghjblal)
 - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/tab-wheel-scroll/)
@@ -10,8 +10,9 @@ Available for **Chrome**, **Firefox**, and **Edge**.
 
 ## Usage
 
-- Hold **Alt** and scroll up/down to switch tabs
-- or Hold the **right mouse button** and scroll up/down to switch tabs
+- Hold **Alt** and scroll **up/down** to switch tabs
+- or Hold the **right mouse button** and scroll **up/down** to switch tabs
+- Horizontal scrolling (left/right) is also supported and works the same way
 
 > Your cursor must be positioned over the web page content (not over the tab bar itself).
 
