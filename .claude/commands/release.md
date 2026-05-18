@@ -29,13 +29,17 @@ Release the project. The argument must be one of: `major`, `minor`, or `bugfix`.
 - Do NOT add a new `## [Unreleased]` section — leave the file as-is after the replacement.
 - The format must comply with [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 5. Commit and tag
+## 5. Update manifest versions
 
-- Stage only `CHANGELOG.md`: `git add CHANGELOG.md`
+- Update the `"version"` field in `src/manifest.chrome.json`, `src/manifest.edge.json`, and `src/manifest.firefox.json` to VERSION (without the `v` prefix).
+
+## 6. Commit and tag
+
+- Stage `CHANGELOG.md` and the three manifest files: `git add CHANGELOG.md src/manifest.chrome.json src/manifest.edge.json src/manifest.firefox.json`
 - Commit with message: `Release vVERSION`
 - Create an annotated tag: `git tag -a vVERSION -m "Release vVERSION"`
 
-## 6. Push
+## 7. Push
 
 - Push the commit: `git push`
 - Push the tag: `git push origin vVERSION`
