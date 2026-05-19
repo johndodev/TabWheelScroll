@@ -1,5 +1,6 @@
 # Description
 
+```
 This plugin lets you navigate between browser tabs using your mouse wheel.
 
 How to use:
@@ -28,3 +29,4 @@ Since there are no notifications for comments, please contact me via email or Gi
 Open Source:
 ------------
 GitHub: https://github.com/johndodev/TabWheelScroll
+```
