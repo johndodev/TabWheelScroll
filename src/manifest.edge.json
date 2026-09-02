@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Wheel Scroll",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description" : "Switch tabs with Alt + mouse wheel or right-click + mouse wheel.",
   "action": {
     "default_icon": {
