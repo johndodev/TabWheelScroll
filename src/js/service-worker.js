@@ -43,13 +43,8 @@ async function activeTab(fromTab, delta, rightClick) {
 	}
 
 	if (tab) {
+		if (rightClick) await suppressContextMenu(tab.id);
 		chrome.tabs.update(tab.id, { active: true });
-		if (rightClick) {
-			chrome.scripting.executeScript({
-				target: { tabId: tab.id },
-				func: disableContextMenu
-			});
-		}
 	}
 }
 
@@ -73,11 +68,25 @@ function injectEverywhere() {
 	});
 }
 
+/**
+ * Injected before the tab is activated so the listener is in place when the right button is released.
+ * Capture phase on window: pages with their own context menu (e.g. YouTube player) never see the event.
+ */
+async function suppressContextMenu(tabId) {
+	const timeout = new Promise(resolve => setTimeout(resolve, 150));
+	const inject = chrome.scripting.executeScript({
+		target: { tabId, allFrames: true },
+		func: disableContextMenu
+	}).catch(() => {});
+	await Promise.race([inject, timeout]);
+}
+
 function disableContextMenu() {
 	function preventOnce(e) {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 	}
-	window.addEventListener("contextmenu", preventOnce, { once: true });
+	window.addEventListener("contextmenu", preventOnce, { capture: true, once: true });
 }
 
 async function checkTabAvailable(tab) {
